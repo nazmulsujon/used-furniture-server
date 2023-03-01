@@ -11,6 +11,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.redirect("https://dammamusedfurniture.com/");
+});
+
 // Replace the uri string with your MongoDB deployment's connection string.
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pdzsrjb.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -26,8 +30,7 @@ async function run() {
     // all products API
     app.get("/products", async (req, res) => {
       const query = {};
-
-      const products = await productsCollection.find(query).toArray();
+      const products = await productsCollection.find(query).sort({ id: 1 }).toArray();
       res.send(products);
     });
 
